@@ -1,0 +1,8 @@
+# Nuxt
+.nuxt
+node_modules
+dist
+package-lock.json
+
+# Project specific
+#
