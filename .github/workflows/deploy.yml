@@ -16,31 +16,26 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      # Checkout latest files
       - uses: actions/checkout@v3
-      # Install/Setup node
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '16.15'
-      # Cache dependencies for faste consecutive runs
-      # TODO: look more in to why this works
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
+
+      # Look in to caching dependencies for faster consecutive runs
+      # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+
       # Generate static files
-      - name: Build
-        run: npm ci
-        run: npm run generate
+      - run: npm ci
+      # TODO: tests
+      # - run: npm run test
+      - run: npm run generate
+
       # Deploy static site to gh-pages branch
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output/public
+          publish_dir: ./.output/public
           cname: stylesheet.fun
