@@ -10,6 +10,8 @@ export function generateThemeRoutes(routes) {
   themes.forEach(theme => routes.push({
     name: `theme-${theme}`,
     path: `/theme/${theme}`,
+    // TODO: Is there a way to use nuxt aliases here?
+    // https://v3.nuxtjs.org/api/configuration/nuxt.config#alias
     file: resolve('./components/theme.vue'),
     children: [],
     meta: {
